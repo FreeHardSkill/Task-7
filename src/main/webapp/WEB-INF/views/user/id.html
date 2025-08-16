@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<style>
+    :root {
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --ink: #1d2433;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --ring: rgba(37, 99, 235, .25);
+        --border: #e5e7eb;
+        --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0; padding: 24px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        background: radial-gradient(1200px 800px at 10% -10%, #e8efff, transparent), var(--bg);
+        color: var(--ink);
+    }
+    .wrap {
+        max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 24px;
+    }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(17, 24, 39, .06); }
+
+    .card.photo { padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: start; gap: 16px; }
+    .avatar {
+        width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 6px solid #fff; box-shadow: 0 6px 20px rgba(0,0,0,.08);
+        background: #eef2ff; display: grid; place-items: center;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card.form { padding: 24px; }
+    .title { margin: 0 0 16px; font-size: 20px; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .row { display: grid; gap: 6px; }
+    label { font-size: 13px; color: var(--muted); }
+    .data-label { display: inline-block; padding: 8px 12px; background: #f0f0f0; border-radius: 4px; }
+    .actions { display: flex; gap: 12px; margin-top: 20px; }
+    .btn {
+        appearance: none; border: 1px solid var(--border); background: #fff; color: var(--ink); padding: 12px 16px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: transform .06s ease, box-shadow .2s, background .2s, border-color .2s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn.ghost { background: #fff; }
+    @media (max-width: 820px) {
+        .wrap { grid-template-columns: 1fr; }
+        .avatar { width: 140px; height: 140px; }
+        .grid { grid-template-columns: 1fr; }
+    }
+</style>
+<head>
+    <title th:text="${user.getFirstName() + ' ' + user.getLastName()}">Пользователи</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="wrap">
+    <aside class="card photo">
+        <div class="avatar" aria-label="Стандартная фотография профиля">
+            <img alt="Аватар по умолчанию" src="data:image/svg+xml;utf8,
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'>
+          <defs>
+            <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
+              <stop offset='0' stop-color='%23c7d2fe'/>
+              <stop offset='1' stop-color='%2393c5fd'/>
+            </linearGradient>
+          </defs>
+          <rect width='256' height='256' fill='url(%23g)'/>
+          <circle cx='128' cy='92' r='52' fill='white' fill-opacity='.95'/>
+          <path d='M32 226c0-44 43-74 96-74s96 30 96 74' fill='white' fill-opacity='.95'/>
+        </svg>"/>
+        </div>
+    </aside>
+
+    <!-- Форма с полями -->
+    <main class="card form">
+        <h1 class="title">Данные пользователя</h1>
+        <form id="profileForm" autocomplete="on">
+            <div class="grid">
+                <div class="row">
+                    <label>ID</label>
+                    <label class="data-label" th:text="${user.getId()}">1001</label>
+                </div>
+                <div class="row">
+                    <label>Email</label>
+                    <label class="data-label" th:text="${user.getEmail()}">name@example.com</label>
+                </div>
+                <div class="row">
+                    <label>Имя</label>
+                    <label class="data-label" th:text="${user.getFirstName()}">Иван</label>
+                </div>
+                <div class="row">
+                    <label>Фамилия</label>
+                    <label class="data-label" th:text="${user.getLastName()}">Иванов</label>
+                </div>
+                <div class="row">
+                    <label>Дата рождения</label>
+                    <label class="data-label" th:text="${user.getBirthDay()}">2000-01-01</label>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="btn primary" type="submit" th:href="@{/users/{id}/edit (id = ${user.id})}">Редактировать</a>
+            </div>
+        </form>
+        <form th:method="DELETE" th:action="@{/users/{id}(id=${user.id})}">
+            <button class="btn ghost" type="submit">Удалить</button>
+        </form>
+
+    </main>
+</div>
+</body>
+</html>
